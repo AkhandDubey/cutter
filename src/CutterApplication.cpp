@@ -243,7 +243,11 @@ bool CutterApplication::loadTranslations()
 
     auto availableTranslations = Config()->getAvailableTranslations();
     if (std::find_if(availableTranslations.begin(), availableTranslations.end(),
-                     [&](const Configuration::LangInfo &item) { return locale == item.locale; })
+                     [&](const Configuration::LangInfo &item) {
+                         return locale.language() == item.locale.language()
+                             && locale.script() == item.locale.script()
+                             && locale.country() == item.locale.country();
+                     })
         != availableTranslations.end()) {
         QApplication::setLayoutDirection(locale.textDirection());
         QLocale::setDefault(locale);
